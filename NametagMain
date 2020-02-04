@@ -1,0 +1,102 @@
+local marketPlaceService = game:GetService("MarketplaceService") --Gets Marketplace Service for verifying the gamepass.
+
+local nameTagFolder = Instance.new("Folder",script) --Creates a new folder for holding the nametag GUIs.
+nameTagFolder.Name = "Nametags" --Renames the folder to "Nametags".
+
+local resetScript = script.Resources.ClientTagReset --Creates a clone of the reset script.
+resetScript.Parent = game.StarterPlayer.StarterPlayerScripts --Moves the clone to StarterPlayerScripts.
+resetScript.Disabled = false --Enables the script.
+
+local vipManualArray = { --Add players to the VIP list by listing their username here seperated by semicolons.  This creates a type of table called an array.
+	"ROBLOX"; --Format should be: "Username1";
+	"Shedletsky"; --              "Username2";
+	"Etc..."; --                   And so on...
+	"AwesomePossum212";
+}
+local groupId = script.Settings.GroupId.Value --Set the IntVal "GroupId" (in the Settings folder) to your group's id.
+local gamepassId = script.Settings.GamePassId.Value --Set the IntVal "GamePassID" (in the Settings folder) to a "VIP" style gamepass id for your game.
+local noRoleName = script.Settings.NoRoleName.Value --Set the StringVal "NoRoleName" (in the Settings folder) to whatever you want the rank to be for those who aren't in your group (e.g. 'Visitor', 'Customer', etc.).
+
+newTagFunction = function(player) --Creates a new function named newTagFunction.
+	
+	if nameTagFolder:FindFirstChild(player.Name.."_Tag") then --Checks if an old nametag already exists.
+		nameTagFolder:FindFirstChild(player.Name.."_Tag"):Destroy() --Destroys the preexisting nametag (if applicable).
+	end --Denotes the end of the if-then statement
+	
+	local newTag = script.Resources.DefaultTag:Clone() --Creates a new nametag.
+	
+	newTag.Parent = script.Nametags --Puts newTag into the Nametag folder.
+	newTag.Name = player.Name.."_Tag" --Renames newTag to PlayerName_Tag.
+	newTag.Holder.PlayerName.TextColor3 = script.Settings.NameColor.Value --Sets the name TextColor to whatever the NameColor value is.
+	newTag.Holder.Rank.TextColor3 = script.Settings.RankColor.Value --Sets the rank TextColor to whatever the RankColor value is.
+	
+	repeat --Repeats the code indented below until a certain condition is satisfied below.
+		wait(.01) --Waits 0.1 seconds.
+	until player.Character ~= nil --Waits until the character has spawned.
+	local character = player.Character --Sets the variable character equal to the player's character.
+	
+	newTag.Adornee = character.Head --Makes the tag appear over the player's head.
+	newTag.Holder.PlayerName.Text = player.Name --Changes the nametag so that the player's name is shown.
+	
+	newTag.Holder.Rank.Text = player:GetRoleInGroup(groupId) --Sets the Rank to whatever a user's rank in the group groupId is.
+	if player:GetRoleInGroup(groupId) == "Guest" then --Checks if the user isn't in the group.
+		newTag.Holder.Rank.Text = noRoleName --Changes the Rank Textlabel to whatever noRoleName is set to.
+	end --Denotes the end of the if-then statement.
+	
+	character.Humanoid.DisplayDistanceType = "None" --Gets rid of default name.
+	newTag.Enabled = true --Makes the nametag visible.
+	
+	if marketPlaceService:UserOwnsGamePassAsync(player.UserId, gamepassId) == true then
+		local rainbowName = script.Resources.RainbowScript:Clone() --Makes a clone of the Rainbow VIP script.
+		local rainbowRank = script.Resources.RainbowScript:Clone()
+		
+		rainbowName.Parent = newTag.Holder.PlayerName --Puts the Rainbow VIP script into the nametag.
+		rainbowRank.Parent = newTag.Holder.Rank
+		
+		rainbowName.Disabled = false --Enables the Rainbow VIP script.
+		rainbowRank.Disabled = false
+	else --Executes the below code if the player doesn't own the gamepass.
+		for i = 1, #vipManualArray do --Goes through the below code once for every user in the list.
+			wait(.001) --Waits .001 seconds every iteration.
+			if player.Name == vipManualArray[i] then --Checks if the player's name is in the VIP array.
+				local rainbowName = script.Resources.RainbowScript:Clone() --Makes a clone of the Rainbow VIP script.
+				local rainbowRank = script.Resources.RainbowScript:Clone()
+				
+				rainbowName.Parent = newTag.Holder.PlayerName --Puts the Rainbow VIP script into the nametag.
+				rainbowRank.Parent = newTag.Holder.Rank
+				
+				rainbowName.Disabled = false --Enables the Rainbow VIP script.
+				rainbowRank.Disabled = false
+			end --Denotes the end of the if-then statement.
+		end --Denotes the end of the for-do loop.
+	end --Denotes the end of the if-else statement.
+	if script.Settings.UseLeaderstats.Value == true then --Checks to see if leadertstats is enabled in Settings.
+		local leaderstatsFolder = Instance.new("Folder") --Creates a new folder for leaderstats.
+		local leaderstatsRankVal = Instance.new("StringValue") --Creates a new StringVal for the rank.
+		if player:GetRankInGroup(groupId) ~= 0 then --Checks if the player is in the group.
+			leaderstatsRankVal.Value = player:GetRoleInGroup(groupId) --Sets that StringVal equal to the player's rank.
+		else --Executes this code if the user isn't in the group.
+			leaderstatsRankVal.Value = noRoleName --Makes the user's leaderstat rank whatever noRoleName is.
+		end --Denotes the end of the if-then-else statement.
+		if player:FindFirstChild("leaderstats") == nil then --Checks to see if the player already has a leadertstats folder.
+			leaderstatsFolder.Name = "leaderstats" --Names the leaderstats folder.
+			leaderstatsFolder.Parent = player --Parents the leaderstats folder to the player.
+			leaderstatsRankVal.Parent = leaderstatsFolder --Parents the rank to the leaderstats folder.
+		else --Executes the below code if a leaderstats folder already exists.
+			leaderstatsFolder:Destroy() --Destroys the new leaderstats folder.
+			leaderstatsRankVal.Parent = player:FindFirstChild("leaderstats") --Parents the StringVal to the pre-existing folder.
+		end --Denotes the end of the if-then-else statement.
+		leaderstatsRankVal.Name = "Rank" --Renames the StringVal to "Rank".
+	end --Denotes the end of the if-then statement for if leaderstats are enabled.
+end --Denotes the end of the function.
+
+game.Players.PlayerAdded:Connect(newTagFunction) --Fires newTagFunction whenever a player joins.
+
+script.Resources.ResetTag.OnServerEvent:Connect(function(player) --Fires the below function every time that the ResetTag event is fired from the client.
+	script.Nametags:FindFirstChild(player.Name.."_Tag").Adornee = player.Character.Head --Resets the nametag's adornee.
+	player.Character.Humanoid.DisplayDistanceType = "None" --Makes the default name invisible.
+end) --Denotes the end of the function.
+
+game.Players.PlayerRemoving:Connect(function(player) --Starts whenever the player leaves.
+	script.Nametags:FindFirstChild(player.Name.."_Tag"):Destroy() --Gets rid of the players nametag.
+end) --Denotes the end of the function.
