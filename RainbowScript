@@ -1,4 +1,0 @@
-while true do --Infinitely loops the below code.
-	wait(.2) --Waits .2 seconds each iteration.
-	script.Parent.TextColor3 = Color3.new(math.random(1,255)/255, math.random(1,255)/255, math.random(1,255)/255) --Sets the nametag's TextColor property to a random set of RGB values.
-end --Marks the end of the while true do loop.
