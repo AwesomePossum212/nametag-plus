@@ -1,0 +1,125 @@
+local TweenService = game:GetService("TweenService")
+
+local config = require(script.Configuration)
+local utils = require(script.Utilities)
+
+local holder = utils.constructFromProperties("Folder", config.holder)
+
+local module = {}
+
+module.addTag = function(player)
+	local billboard = utils.constructFromProperties("BillboardGui", config.billboard)
+	local frame = utils.constructFromProperties("Frame", config.frame)
+	local name = utils.constructFromProperties("TextLabel", config.name)
+	local mainStat = utils.constructFromProperties("TextLabel", config.mainStat)
+	local extraStat = utils.constructFromProperties("TextLabel", config.extraStat)
+	local healthBar = utils.constructFromProperties("Frame", config.healthBar)
+	local healthBackground = healthBar:Clone()
+	
+	billboard.Enabled = false
+	healthBackground.BackgroundTransparency = .5
+	healthBackground.Name = "HealthBackground"
+	healthBackground.ZIndex = 1
+	if player ~= nil then
+		if player.Name ~= nil then
+			billboard.Name = player.Name..config.billboard["Name"]
+			name.Text = player.Name
+		else
+			coroutine.wrap(function()
+				repeat
+					wait(.01)
+				until player.Name ~= nil
+				billboard.Name = player.Name..config.billboard["Name"]
+				name.Text = player.Name
+			end)
+		end
+	else
+		billboard.Name = "BLANK_TAG--"..tostring(os.time())
+		warn("Creating an empty tag is not recommended, aside from use with NPCs. Do not forget to delete unused tags.")
+	end
+	
+	name.Parent = frame
+	mainStat.Parent = frame
+	extraStat.Parent = frame
+	healthBar.Parent = frame
+	healthBackground.Parent = frame
+	frame.Parent = billboard
+	billboard.Parent = holder
+	
+	return billboard
+end
+
+module.getTag = function(player)
+	local location = config.holder["Parent"]
+	local holder = location:FindFirstChild(config.holder["Name"])
+	local suffix = config.billboard["Name"]
+	if player.Name ~= nil then
+		if holder:FindFirstChild(player.Name..suffix) ~= nil then
+			return holder:FindFirstChild(player.Name..suffix)
+		elseif holder:FindFirstChild(suffix) ~= nil then
+			repeat
+				wait(.01)
+			until holder:FindFirstChild(player.Name..suffix) ~= nil or holder:FindFirstChild(suffix) == nil
+			if holder:FindFirstChild(player.Name..suffix) ~= nil then
+				return holder:FindFirstChild(player.Name..suffix)
+			end
+		else
+			error(player.Name.."'s tag could not be found in "..location.Name..". Please create a new tag first.")
+		end
+	else
+		coroutine.wrap(function()
+			repeat
+				wait(.01)
+				print("checking")
+			until player.Name ~= nil
+			if holder:FindFirstChild(player.Name..suffix) ~= nil then
+				return holder:FindFirstChild(player.Name..suffix)
+			else
+				error(player.Name.."'s tag was not found when performing getTag.")
+			end
+		end)
+	end
+end
+
+module.linkTag = function(player, tag, groupId)
+	tag.Frame.PlayerName.Text = player.Name
+	if config.options["nameOutlinedWithTeamColor"] == true then
+		player:GetPropertyChangedSignal("TeamColor"):Connect(function(newVal)
+			if player.Neutral ~= true then
+				tag.Frame.Name.TextStrokeColor3 = player.TeamColor.Color
+				tag.Frame.TextStrokeTransparency = false
+			else
+				tag.Frame.TextStrokeTransparency = true
+				tag.Frame.Name.TextStrokeColor3 = config.presets["colors"]["secondary"]
+			end
+		end)
+	end
+	player.CharacterAppearanceLoaded:Connect(function(character)
+		local healthBar = tag.Frame.HealthBar
+		healthBar.Size = config.healthBar["Size"]
+		character.Humanoid:GetPropertyChangedSignal("Health"):Connect(function()
+			tag.Frame.HealthBar.Size = UDim2.new((character.Humanoid.Health/character.Humanoid.MaxHealth) * config.options["healthBarScale"], healthBar.Size.X.Offset, healthBar.Size.Y.Scale, healthBar.Size.Y.Offset)
+		end)
+		if groupId ~= nil then
+			tag.Frame.MainStat.Text = player:GetRoleInGroup(groupId)
+		end
+		character.Humanoid.DisplayDistanceType = "None"
+		tag.Adornee = character.Head
+	end)
+	tag.Enabled = true
+end
+
+module.changeTag = function(player, objectName, properties)
+	local tag = module.getTag(player)
+	if tag ~= nil then
+		if objectName ~= "Frame" then
+			utils.modifyFromProperties(tag.Frame:FindFirstChild(objectName), properties)
+		else
+			utils.modifyFromProperties(tag:FindFirstChild(objectName), properties)
+		end
+	else
+		error("The function 'getTag' experienced an error. No changes were made to "..player.Name.."'s tag.")
+	end
+end
+
+return module
