@@ -16,4 +16,8 @@ Constructs a new tag for the specified player (if no player is given then a blan
 
 Gets the tag for a player that has already been created using data from *Configuration*. Because it uses a player's name, there may be a short yield while that loads in if this is called immediately after Roblox's .PlayerAdded event fires.
 
-**.linkTag**(
+**.linkTag**(player: Player, tag: Nametag, groupId: Integer [specific])
+
+Links a specific tag to a player, which makes it so the script automatically updates team color, group ranks, etc. The group id will make *NametagModule* automatically update a player's group role in the *MainStat* text label on spawn. This should only be called once.
+
+changeTag(tag: Nametag, objectName: String [specific], properties: Dictionary [specific])
