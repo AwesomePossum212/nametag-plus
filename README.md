@@ -2,4 +2,4 @@
 Designed to solve the flaws inherent to this system:
 https://devforum.roblox.com/t/open-source-fully-documented-nametag-and-rank-system/355445
 
-This repository will serve as a better way for people to improve upon the code behind the system. Once a pull request is merged into the master, the free-model and place file will be updated.
+Nametag+ (also known as NametagPlus) is designed to be a performant, modular, and accessible system for augmenting Roblox's built in name tags. The Releases page contains the latest production place file, pre-assembled with example implementation.
