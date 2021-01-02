@@ -1,5 +1,6 @@
 local module = {}
 
+-->>Basic settings used in the whole system.
 module.options = {
 	isHealthBarVisible = true;
 	defaultText = "";
@@ -9,6 +10,7 @@ module.options = {
 	healthBarScale = .8
 }
 
+-->>Preset styles
 module.presets = {
 	colors = {
 		primary = Color3.new(1, 1, 1);
@@ -18,11 +20,8 @@ module.presets = {
 		primary = Enum.Font.GothamBlack;
 		secondary = Enum.Font.Gotham;
 	};
-	tweens = {
-		HealthBar = TweenInfo.new(.2, Enum.EasingStyle.Exponential);
-	}
 }
-
+-->>The rest of the script is the properties of UI components.
 module.holder = {
 	Name = "NametagFolder";
 	Parent = game:GetService("Workspace");
