@@ -1,13 +1,17 @@
+-->>Services and modules
 local TweenService = game:GetService("TweenService")
-
 local config = require(script.Configuration)
 local utils = require(script.Utilities)
 
+-->>Initial setup tasks
 local holder = utils.constructFromProperties("Folder", config.holder)
 
 local module = {}
 
+-->>(Function) [Yields] [Returns Nametag] addTag(player: Player)
+--Creates a new default nametag for a specfied player and returns it.
 module.addTag = function(player)
+	-->>Creates the components separately using util and config.
 	local billboard = utils.constructFromProperties("BillboardGui", config.billboard)
 	local frame = utils.constructFromProperties("Frame", config.frame)
 	local name = utils.constructFromProperties("TextLabel", config.name)
@@ -16,6 +20,7 @@ module.addTag = function(player)
 	local healthBar = utils.constructFromProperties("Frame", config.healthBar)
 	local healthBackground = healthBar:Clone()
 	
+	-->>Sets up the individual components
 	billboard.Enabled = false
 	healthBackground.BackgroundTransparency = .5
 	healthBackground.Name = "HealthBackground"
@@ -24,8 +29,8 @@ module.addTag = function(player)
 		if player.Name ~= nil then
 			billboard.Name = player.Name..config.billboard["Name"]
 			name.Text = player.Name
-		else
-			coroutine.wrap(function()
+		else--Sometimes the player's name isn't loaded when PlayerAdded is fired.
+			coroutine.wrap(function()--A coroutine is used to let the script send back the tag without it being finished.
 				repeat
 					wait(.01)
 				until player.Name ~= nil
@@ -33,11 +38,12 @@ module.addTag = function(player)
 				name.Text = player.Name
 			end)
 		end
-	else
+	else--Deals with blank tags. Warning prevents accidental use.
 		billboard.Name = "BLANK_TAG--"..tostring(os.time())
 		warn("Creating an empty tag is not recommended, aside from use with NPCs. Do not forget to delete unused tags.")
 	end
 	
+	-->>Assembles the components into a nametag and puts it into the holder.
 	name.Parent = frame
 	mainStat.Parent = frame
 	extraStat.Parent = frame
@@ -46,13 +52,18 @@ module.addTag = function(player)
 	frame.Parent = billboard
 	billboard.Parent = holder
 	
-	return billboard
+	return billboard--Sends the tag back to the requester for use with linkTag.
 end
 
+-->>(Function) getTag(player: Player)
+--Gets a player's nametag using configuration data.
 module.getTag = function(player)
+	-->>Finds the info from config about the naming scheme
 	local location = config.holder["Parent"]
 	local holder = location:FindFirstChild(config.holder["Name"])
 	local suffix = config.billboard["Name"]
+	
+	-->>Looks for the tag, then if it is not found waits to see if a tag is being renamed while the player loads.
 	if player.Name ~= nil then
 		if holder:FindFirstChild(player.Name..suffix) ~= nil then
 			return holder:FindFirstChild(player.Name..suffix)
@@ -66,51 +77,60 @@ module.getTag = function(player)
 		else
 			error(player.Name.."'s tag could not be found in "..location.Name..". Please create a new tag first.")
 		end
-	else
-		coroutine.wrap(function()
-			repeat
-				wait(.01)
-				print("checking")
-			until player.Name ~= nil
-			if holder:FindFirstChild(player.Name..suffix) ~= nil then
-				return holder:FindFirstChild(player.Name..suffix)
-			else
-				error(player.Name.."'s tag was not found when performing getTag.")
-			end
-		end)
+	else--As with before, when the player's name does not load, the module will wait for it to catch up before proceeding.
+		repeat
+			wait(.01)
+			print("checking")
+		until player.Name ~= nil
+		if holder:FindFirstChild(player.Name..suffix) ~= nil then
+			return holder:FindFirstChild(player.Name..suffix)
+		else
+			error(player.Name.."'s tag was not found when performing getTag.")
+		end
 	end
 end
 
+-->>(Function) linkTag(player: Player, tag: Nametag, groupId: Integer)
+--Links a specific tag to a player. Including a group id will make it so the group role replaces MainStat.
 module.linkTag = function(player, tag, groupId)
-	tag.Frame.PlayerName.Text = player.Name
+	-->>Deals with updating the name's text border color with the team color.
 	if config.options["nameOutlinedWithTeamColor"] == true then
 		player:GetPropertyChangedSignal("TeamColor"):Connect(function(newVal)
 			if player.Neutral ~= true then
 				tag.Frame.Name.TextStrokeColor3 = player.TeamColor.Color
-				tag.Frame.TextStrokeTransparency = false
+				tag.Frame.TextStrokeTransparency = 0
 			else
-				tag.Frame.TextStrokeTransparency = true
+				tag.Frame.TextStrokeTransparency = 1
 				tag.Frame.Name.TextStrokeColor3 = config.presets["colors"]["secondary"]
 			end
 		end)
 	end
+	
+	-->> Manages spawn based changes.
 	player.CharacterAppearanceLoaded:Connect(function(character)
+		-->>Updates the health bar size.
 		local healthBar = tag.Frame.HealthBar
 		healthBar.Size = config.healthBar["Size"]
 		character.Humanoid:GetPropertyChangedSignal("Health"):Connect(function()
 			tag.Frame.HealthBar.Size = UDim2.new((character.Humanoid.Health/character.Humanoid.MaxHealth) * config.options["healthBarScale"], healthBar.Size.X.Offset, healthBar.Size.Y.Scale, healthBar.Size.Y.Offset)
 		end)
+		-->>Updates the MainStat with the role.
 		if groupId ~= nil then
 			tag.Frame.MainStat.Text = player:GetRoleInGroup(groupId)
 		end
+		-->>Changes the humanoid to display the tag.
 		character.Humanoid.DisplayDistanceType = "None"
 		tag.Adornee = character.Head
 	end)
-	tag.Enabled = true
+	tag.Enabled = true--Enables the tag to make it visible after the chanes are complete.
 end
 
-module.changeTag = function(player, objectName, properties)
-	local tag = module.getTag(player)
+-->>(Function) changeTag(tag: Nametag, objectName: String [Specific], properties: Dictionary [Specific])
+--Changes the properties of the specified object in a given player's nametag.
+--Strings are names of objects, as specified in config.
+--Dictionaries are in the format {Property = Value; Property = Value; etc.}. Example: {Text = "Spam"; ZIndex = 5}.
+module.changeTag = function(tag, objectName, properties)
+	--Uses util functions to modify the selected 
 	if tag ~= nil then
 		if objectName ~= "Frame" then
 			utils.modifyFromProperties(tag.Frame:FindFirstChild(objectName), properties)
