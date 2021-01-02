@@ -18,6 +18,31 @@ Gets the tag for a player that has already been created using data from *Configu
 
 **.linkTag**(player: Player, tag: Nametag, groupId: Integer [specific])
 
-Links a specific tag to a player, which makes it so the script automatically updates team color, group ranks, etc. The group id will make *NametagModule* automatically update a player's group role in the *MainStat* text label on spawn. This should only be called once.
+Links a specific tag to a player, which makes it so the script automatically updates team color, group ranks, etc. The group id will make *NametagModule* automatically update a player's group role in the *MainStat* text label on spawn. This system allows you to link different players to different groups as needed. This should only be called once.
 
-changeTag(tag: Nametag, objectName: String [specific], properties: Dictionary [specific])
+**changeTag**(tag: Nametag, objectName: String [specific], properties: Dictionary [specific])
+
+This will change the given part of the tag using the dictionary provided. The objectName parameter should be the name of the instance (in the nametag) that you want to change (i.e. "Frame" or "MainStat"). It is recommended to reference *Configuration* to get the most up-to-date name. The properties dictionary follows this format:
+
+````
+props = {
+  propertyName = newValue;
+  propertyName = newValue;
+  *etc.*
+}
+````
+So, for example:
+````
+example = {
+  Text = "foo"
+  ZIndex = 5
+  Visible = true
+}
+````
+___Example Implementation___
+
+A few notes to begin:
+- *Configuration* and *Utilities* should be parented to *NametagModule*, and all should be module scripts.
+- It is recommended that *NametagModule* be placed in ReplicatedStorage.
+
+**
