@@ -55,7 +55,7 @@ module.addTag = function(player)
 	return billboard--Sends the tag back to the requester for use with linkTag.
 end
 
--->>(Function) getTag(player: Player)
+-->>(Function) getTag(player: Player) [Yields] [Returns Nametag]
 --Gets a player's nametag using configuration data.
 module.getTag = function(player)
 	-->>Finds the info from config about the naming scheme
