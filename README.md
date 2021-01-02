@@ -45,4 +45,34 @@ A few notes to begin:
 - *Configuration* and *Utilities* should be parented to *NametagModule*, and all should be module scripts.
 - It is recommended that *NametagModule* be placed in ReplicatedStorage.
 
-**
+**Bare minimum**
+
+````
+local nametagSystem = require(game:GetService("ReplicatedStorage"):FindFirstChild("NametagModule")
+game:GetService("Players").PlayerAdded:Connect(function(player)
+  local tag = nametagSystem.addTag(player)
+  nametagSystem.linkTag(player, tag)
+end
+````
+This example, given the default setup, will create a new nametag for every player who joins. Note that there are no redundancies on the .PlayerAdded event, so some players may not get nametags (.PlayerAdded does not always fire).
+
+**Group + Config**
+````
+-->>Services and modules
+local nametagSystem = require(game:GetService("ReplicatedStorage"):FindFirstChild("NametagModule")
+local nametagConfig = require(nametagSystem.Configuration)
+
+-->>Constants and globals
+local groupId = --Insert your group's id here or leave it blank
+
+-->>Give new players a new tag.
+game:GetService("Players").PlayerAdded:Connect(function(player)
+  local tag = nametagSystem.addTag(player)
+  nametagSystem.linkTag(player, tag, groupId)
+end
+````
+This example will set the given player's MainStat to their role in the specified group on spawn (if no id is given then the group role will not be activated).
+
+**Check releases for the latest stable interactive example set up.**
+
+# Questions? Suggestions? Head over to Discussions!
