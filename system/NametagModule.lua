@@ -1,13 +1,9 @@
 -->>Services and modules
 local TweenService = game:GetService("TweenService")
-local RunService = game:GetService("RunService")
 local config = require(script.Configuration)
 local utils = require(script.Utilities)
 
 -->>Initial setup tasks
-local hearbeatWait = function(length)
-	RunService.Heartbeat:Wait(length)
-end
 local holder = utils.constructFromProperties("Folder", config.holder)
 
 local module = {}
@@ -36,7 +32,7 @@ module.addTag = function(player)
 		else--Sometimes the player's name isn't loaded when PlayerAdded is fired.
 			coroutine.wrap(function()--A coroutine is used to let the script send back the tag without it being finished.
 				repeat
-					heartbeatWait(.01)
+					wait(.01)
 				until player.Name ~= nil
 				billboard.Name = player.Name..config.billboard["Name"]
 				name.Text = player.Name
@@ -73,7 +69,7 @@ module.getTag = function(player)
 			return holder:FindFirstChild(player.Name..suffix)
 		elseif holder:FindFirstChild(suffix) ~= nil then
 			repeat
-				heartbeatWait(.01)
+				wait(.01)
 			until holder:FindFirstChild(player.Name..suffix) ~= nil or holder:FindFirstChild(suffix) == nil
 			if holder:FindFirstChild(player.Name..suffix) ~= nil then
 				return holder:FindFirstChild(player.Name..suffix)
@@ -83,7 +79,7 @@ module.getTag = function(player)
 		end
 	else--As with before, when the player's name does not load, the module will wait for it to catch up before proceeding.
 		repeat
-			heartbeatWait(.01)
+			wait(.01)
 			print("checking")
 		until player.Name ~= nil
 		if holder:FindFirstChild(player.Name..suffix) ~= nil then
