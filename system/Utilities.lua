@@ -1,4 +1,4 @@
--->>Two useful functions that take a table of properties.
+-->>Some useful functions that take a table of properties.
 local module = {}
 
 -->>(Function) [Yields] [Returns Instance of specified class] constructFromProperties(class: String [Specific], properties: Dictionary [Specific])
