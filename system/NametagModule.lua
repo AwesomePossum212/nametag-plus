@@ -5,9 +5,7 @@ local config = require(script.Configuration)
 local utils = require(script.Utilities)
 
 -->>Initial setup tasks
-local hearbeatWait = function(length)
-	RunService.Heartbeat:Wait(length)
-end
+local hearbeatWait = utils.heartbeatWait
 local holder = utils.constructFromProperties("Folder", config.holder)
 
 local module = {}
@@ -30,18 +28,9 @@ module.addTag = function(player)
 	healthBackground.Name = "HealthBackground"
 	healthBackground.ZIndex = 1
 	if player ~= nil then
-		if player.Name ~= nil then
-			billboard.Name = player.Name..config.billboard["Name"]
-			name.Text = player.Name
-		else--Sometimes the player's name isn't loaded when PlayerAdded is fired.
-			coroutine.wrap(function()--A coroutine is used to let the script send back the tag without it being finished.
-				repeat
-					heartbeatWait(.01)
-				until player.Name ~= nil
-				billboard.Name = player.Name..config.billboard["Name"]
-				name.Text = player.Name
-			end)
-		end
+		local finalName = utils.waitForProperty(player, "Name")
+		billboard.Name = finalName..config.billboard["Name"]
+		name.Text = finalName
 	else--Deals with blank tags. Warning prevents accidental use.
 		billboard.Name = "BLANK_TAG--"..tostring(os.time())
 		warn("Creating an empty tag is not recommended, aside from use with NPCs. Do not forget to delete unused tags.")
@@ -82,12 +71,9 @@ module.getTag = function(player)
 			error(player.Name.."'s tag could not be found in "..location.Name..". Please create a new tag first.")
 		end
 	else--As with before, when the player's name does not load, the module will wait for it to catch up before proceeding.
-		repeat
-			heartbeatWait(.01)
-			print("checking")
-		until player.Name ~= nil
-		if holder:FindFirstChild(player.Name..suffix) ~= nil then
-			return holder:FindFirstChild(player.Name..suffix)
+		local finalName = utils.waitForProperty(player, "Name")
+		if holder:FindFirstChild(finalName..suffix) ~= nil then
+			return holder:FindFirstChild(finalName..suffix)
 		else
 			error(player.Name.."'s tag was not found when performing getTag.")
 		end
