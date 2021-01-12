@@ -2,7 +2,7 @@ local module = {}
 
 -->>Basic settings used in the whole system.
 module.options = {
-	isHealthBarVisible = true;
+	isHealthBarVisible = false;
 	defaultText = "";
 	maxDistanceVisibleFrom = 50;
 	nameOutlinedWithTeamColor = true;

@@ -5,7 +5,7 @@ local config = require(script.Configuration)
 local utils = require(script.Utilities)
 
 -->>Initial setup tasks
-local hearbeatWait = utils.heartbeatWait
+local heartbeatWait = utils.heartbeatWait
 local holder = utils.constructFromProperties("Folder", config.holder)
 
 local module = {}
@@ -21,7 +21,7 @@ module.addTag = function(player)
 	local extraStat = utils.constructFromProperties("TextLabel", config.extraStat)
 	local healthBar = utils.constructFromProperties("Frame", config.healthBar)
 	local healthBackground = healthBar:Clone()
-	
+
 	-->>Sets up the individual components
 	billboard.Enabled = false
 	healthBackground.BackgroundTransparency = .5
@@ -35,7 +35,7 @@ module.addTag = function(player)
 		billboard.Name = "BLANK_TAG--"..tostring(os.time())
 		warn("Creating an empty tag is not recommended, aside from use with NPCs. Do not forget to delete unused tags.")
 	end
-	
+
 	-->>Assembles the components into a nametag and puts it into the holder.
 	name.Parent = frame
 	mainStat.Parent = frame
@@ -44,7 +44,7 @@ module.addTag = function(player)
 	healthBackground.Parent = frame
 	frame.Parent = billboard
 	billboard.Parent = holder
-	
+
 	return billboard--Sends the tag back to the requester for use with linkTag.
 end
 
@@ -55,7 +55,7 @@ module.getTag = function(player)
 	local location = config.holder["Parent"]
 	local holder = location:FindFirstChild(config.holder["Name"])
 	local suffix = config.billboard["Name"]
-	
+
 	-->>Looks for the tag, then if it is not found waits to see if a tag is being renamed while the player loads.
 	if player.Name ~= nil then
 		if holder:FindFirstChild(player.Name..suffix) ~= nil then
@@ -85,17 +85,20 @@ end
 module.linkTag = function(player, tag, groupId)
 	-->>Deals with updating the name's text border color with the team color.
 	if config.options["nameOutlinedWithTeamColor"] == true then
-		player:GetPropertyChangedSignal("TeamColor"):Connect(function(newVal)
+		local updateTeamColor = function()
+			local nameLabel = tag:FindFirstChild(config.frame["Name"]):FindFirstChild(config.name["Name"])
 			if player.Neutral ~= true then
-				tag.Frame.Name.TextStrokeColor3 = player.TeamColor.Color
-				tag.Frame.TextStrokeTransparency = 0
+				nameLabel.TextStrokeColor3 = player.TeamColor.Color
+				nameLabel.TextStrokeTransparency = 0
 			else
-				tag.Frame.TextStrokeTransparency = 1
-				tag.Frame.Name.TextStrokeColor3 = config.presets["colors"]["secondary"]
+				nameLabel.TextStrokeTransparency = 1
+				nameLabel.TextStrokeColor3 = config.presets["colors"]["secondary"]
 			end
-		end)
+		end
+		updateTeamColor()--Updates the team color preemptively just in case.
+		player:GetPropertyChangedSignal("Team"):Connect(updateTeamColor)
 	end
-	
+
 	-->> Manages spawn based changes.
 	player.CharacterAppearanceLoaded:Connect(function(character)
 		-->>Updates the health bar size.
