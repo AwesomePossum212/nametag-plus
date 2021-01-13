@@ -1,7 +1,7 @@
 # Nametag+
 
 ### WARNING: Currently in beta!
-Expect the possibility of major updates being released in the future. All releases going forward should be stable though.
+Expect the possibility of major updates being released in the future. All releases going forward should be safe and are unlikely to have any major bugs.
 
 ### Background
 
