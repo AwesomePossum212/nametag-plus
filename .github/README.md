@@ -1,12 +1,13 @@
 # Nametag+
 
-## WARNING: Still in alpha! Refrain from using in production work; some features still do not work completely!
+### WARNING: Currently in beta!
+Expect the possibility of major updates being released in the future. All releases going forward should be stable though.
 
-___Background___
+### Background
 
 Nametag+ (also referred to as NametagPlus) is designed to be a performant, modular, and accessible system for augmenting Roblox's built in name tags. This project was created based off of the core design principles from: https://devforum.roblox.com/t/open-source-fully-documented-nametag-and-rank-system/355445. Check the releases page for the lastest place file, which will have all of the code pre-assembled and contain example implementation.
 
-___Usage Guide___
+### Usage Guide
 
 Nametag+ is designed to simplify nametags into a few core functions. Note that you should always use module.func(par) as opposed to module:func(par)
 
@@ -41,7 +42,7 @@ example = {
   Visible = true
 }
 ````
-___Example Implementation___
+### Example Implementation
 
 A few notes to begin:
 - *Configuration* and *Utilities* should be parented to *NametagModule*, and all should be module scripts.
@@ -77,4 +78,4 @@ This example will set the given player's MainStat to their role in the specified
 
 **Check releases for the latest stable interactive example set up.**
 
-# Questions? Suggestions? Head over to Discussions!
+### Questions? Suggestions? Head over to Discussions!
