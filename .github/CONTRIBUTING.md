@@ -41,4 +41,4 @@ In order to keep the repository organized, please adhere to the following rules:
 - Use the appropriate category in discussions and stay on-topic with your replies.
 - Put all code related to the nametag system in the src folder, while keeping all of the repository stuff (i.e. Readme.md) in .github.
 - Use issues only for specific bug reports and feature requests. General ideas should go into discussions.
-- Keep your content PG and in line with the Code of Conduct
+- Keep your content PG and in line with the Code of Conduct.
