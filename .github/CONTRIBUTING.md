@@ -32,6 +32,7 @@ You may notice that there is already some documentation included with Nametag+. 
   - Add documentation to functions as already shown in the format "-->>(Function) [Tags such as [Yields] or [Returns SOMETHING]] nameOfFunction(parameter: type, parameter: type)" and add another minor comment underneath concerning what the function does.
 - Add a minor comment (--) to the end of any line that may be unclear.
 - Use Roblox Studio's absolute indentation feature to make consistent indents.
+- In tables, end every entry with a semicolon. This makes it easier to maintain large tables.
 
 **5 - Repository etiquette**
 
@@ -41,4 +42,4 @@ In order to keep the repository organized, please adhere to the following rules:
 - Use the appropriate category in discussions and stay on-topic with your replies.
 - Put all code related to the nametag system in the src folder, while keeping all of the repository stuff (i.e. Readme.md) in .github.
 - Use issues only for specific bug reports and feature requests. General ideas should go into discussions.
-- Keep your content PG and in line with the Code of Conduct.
+- Keep your content PG and in line with the [Code of Conduct](https://github.com/AwesomePossum212/nametag-plus/blob/main/.github/CODE_OF_CONDUCT.md).
