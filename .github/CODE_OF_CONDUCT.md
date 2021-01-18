@@ -7,3 +7,4 @@ I'll keep this simple. I don't expect this project to need anything formal.
   - Don't troll or add unrelated content. If it isn't related to the project, don't post it.
   - All content should be PG. Remember, this repository is intended for use by developers of all ages.
 - Repository maintainers have the final say in what is against the rules.
+- And of course, everything here should obey GitHub's ToS.
