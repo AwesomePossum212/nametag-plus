@@ -5,9 +5,9 @@ local module = {}
 
 -->>(Function) [Yields] [Returns time elapsed] heartbeatWait(length: Number)
 --Uses Runservice.Heartbeat to wait a more exact amount of time
-module.heartbeatWait = function(length)
+module.heartbeatWait = function()
 	local startTime = os.clock()
-	RunService.Heartbeat:Wait(length)
+	RunService.Heartbeat:Wait()
 	return os.clock() - startTime
 end
 
