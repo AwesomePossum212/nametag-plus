@@ -9,11 +9,11 @@ Nametag+ (also referred to as NametagPlus) is designed to be a performant, modul
 
 ### Usage Guide
 
-Nametag+ is designed to simplify nametags into a few core functions. Note that you should always use module.func(par) as opposed to module:func(par)
+Nametag+ is designed to simplify nametags into only a few functions. Note that you should always use module.func(par) as opposed to module:func(par)
 
 **.addTag**(player: Player [optional]) [yields] [returns]
 
-Constructs a new tag for the specified player (if no player is given then a blank tag will be made and a warning will be issued) in the style recorded in *Configuration*. Calling this function will cause the thread to yield until the *NametagModule* returns the nametag, but note that the nametag may not be named (and thus will be temporarily delay **getTag**) until the player's name is loaded. This is to maximize the speed of the return while still making sure each tag has a unique name.
+Constructs a new tag for the specified player (if no player instance is given then a blank tag will be made and a warning will be issued) in the style recorded in *Configuration*. Calling this function will cause the thread to yield until the *NametagModule* returns the nametag, but note that the nametag may not be named (and thus will be temporarily delay **getTag**) until the player's name is loaded. This is to maximize the speed of the return while still making sure each tag has a unique name.
 
 **.getTag**(player: Player) [yields] [returns]
 
