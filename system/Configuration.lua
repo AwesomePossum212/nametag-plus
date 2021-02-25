@@ -7,7 +7,8 @@ module.options = {
 	maxDistanceVisibleFrom = 50;
 	nameOutlinedWithTeamColor = true;
 	healthBarAnchorPoint = Vector2.new(0, 0);
-	healthBarScale = .8
+	healthBarScale = .8;
+	useDisplayName = true; --Overrides the name -> display name, mainStat -> username, and extraStat -> group rank (if a group is linked). name and mainStat will keep the display/user name unless it is overrided with changeTag().
 }
 
 -->>Preset styles
