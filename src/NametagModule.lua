@@ -30,7 +30,16 @@ module.addTag = function(player)
 	if player ~= nil then
 		local finalName = utils.waitForProperty(player, "Name")
 		billboard.Name = finalName..config.billboard["Name"]
-		name.Text = finalName
+		if config.options["useDisplayName"] == true then
+			if player.DisplayName ~= nil then --Deals with the gradual rollout of display names; some players don't have access yet.
+				name.Text = player.DisplayName
+			else
+				name.Text = finalName
+			end
+			mainStat.Text = "@"..finalName
+		else
+			name.Text = finalName
+		end
 	else--Deals with blank tags. Warning prevents accidental use.
 		billboard.Name = "BLANK_TAG--"..tostring(os.time())
 		warn("Creating an empty tag is not recommended, aside from use with NPCs. Do not forget to delete unused tags.")
