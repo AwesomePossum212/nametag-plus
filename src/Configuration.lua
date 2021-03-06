@@ -34,7 +34,7 @@ module.billboard = {
 	AlwaysOnTop = false;
 	LightInfluence = 0;
 	MaxDistance = module.options["maxDistanceVisibleFrom"];
-	ExtentsOffsetWorldSpace = Vector3.new(0, 7, 0);
+	ExtentsOffsetWorldSpace = Vector3.new(0, 4, 0);
 	ResetOnSpawn = false;
 	Size = UDim2.new(8, 0, 2, 0);
 }
