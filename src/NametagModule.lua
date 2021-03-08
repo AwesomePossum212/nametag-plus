@@ -144,7 +144,7 @@ module.changeTag = function(tag, objectName, properties)
 			utils.modifyFromProperties(tag:FindFirstChild(objectName), properties)
 		end
 	else
-		error("The function 'getTag' experienced an error. No changes were made to "..player.Name.."'s tag.")
+		error("The function 'getTag' experienced an error. No changes were made to "..tag.Name)
 	end
 end
 
