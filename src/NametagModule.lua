@@ -118,7 +118,11 @@ module.linkTag = function(player, tag, groupId)
 		end)
 		-->>Updates the MainStat with the role.
 		if groupId ~= nil then
-			tag.Frame.MainStat.Text = player:GetRoleInGroup(groupId)
+			if config.options["useDisplayName"] == true then
+				tag.Frame.ExtraStat.Text = player:GetRoleInGroup(groupId)
+			else
+				tag.Frame.MainStat.Text = player:GetRoleInGroup(groupId)
+			end
 		end
 		-->>Changes the humanoid to display the tag.
 		character.Humanoid.DisplayDistanceType = "None"
