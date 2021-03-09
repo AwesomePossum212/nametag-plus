@@ -144,7 +144,7 @@ module.changeTag = function(tag, objectName, properties)
 			utils.modifyFromProperties(tag:FindFirstChild(objectName), properties)
 		end
 	else
-		error("The function 'getTag' experienced an error. No changes were made to "..tag.Name)
+		error("The function changeTag experienced an error: the tag passed to the function no longer exists. No changes have been made.")
 	end
 end
 
