@@ -37,9 +37,9 @@ props = {
 So, for example:
 ````
 example = {
-  Text = "foo"
-  ZIndex = 5
-  Visible = true
+  Text = "foo";
+  ZIndex = 5;
+  Visible = true;
 }
 ````
 ### Example Implementation
