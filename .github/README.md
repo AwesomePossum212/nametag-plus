@@ -62,7 +62,7 @@ This example, given the default setup, will create a new nametag for every playe
 **Group + Config**
 ````
 -->>Services and modules
-local nametagSystem = require(game:GetService("ReplicatedStorage"):FindFirstChild("NametagModule")
+local nametagSystem = require(game:GetService("ReplicatedStorage"):FindFirstChild("NametagModule"))
 local nametagConfig = require(nametagSystem.Configuration)
 
 -->>Constants and globals
@@ -72,7 +72,7 @@ local groupId = --Insert your group's id here or leave it blank
 game:GetService("Players").PlayerAdded:Connect(function(player)
   local tag = nametagSystem.addTag(player)
   nametagSystem.linkTag(player, tag, groupId)
-end
+end)
 ````
 This example will set the given player's MainStat to their role in the specified group on spawn (if no id is given then the group role will not be activated).
 
