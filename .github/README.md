@@ -63,7 +63,7 @@ This example, given the default setup, will create a new nametag for every playe
 ````
 -->>Services and modules
 local nametagSystem = require(game:GetService("ReplicatedStorage"):FindFirstChild("NametagModule"))
-local nametagConfig = require(nametagSystem.Configuration)
+local nametagConfig = require(game:GetService("ReplicatedStorage"):FindFirstChild("NametagModule").Configuration)
 
 -->>Constants and globals
 local groupId = --Insert your group's id here or leave it blank
