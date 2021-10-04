@@ -167,3 +167,5 @@ nametagPlus.addTag = addTag
 nametagPlus.getTag = getTag
 nametagPlus.changeTag = changeTag
 nametagPlus.linkTag = linkTag
+
+return nametagPlus
