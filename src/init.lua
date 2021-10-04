@@ -70,8 +70,8 @@ end
 
 local function getTag(player: Player): BillboardGui
 	-- Gets the current naming scheme
-	local location = config.holder["Parent"]
-	local shadow_holder = location:FindFirstChild(config.holder["Name"])
+	local location = config.defaults.holder["Parent"]
+	local shadow_holder = location:FindFirstChild(config.defaults.holder["Name"])
 	local suffix = config.defaults.billboard["Name"]
 
 	-- Looks for the tag, then if it is not found waits to see
@@ -120,7 +120,7 @@ local function linkTag(player: Player, tag: BillboardGui, groupId: number | nil)
 	-- Deals with updating the name's text border color with the team color.
 	if config.options["nameOutlinedWithTeamColor"] == true then
 		local updateTeamColor = function()
-			local nameLabel = tag:FindFirstChild(config.frame["Name"]):FindFirstChild(config.name["Name"])
+			local nameLabel: TextLabel = tag:FindFirstChild(config.defaults.frame["Name"]):FindFirstChild(config.defaults.name["Name"])
 			if player.Neutral ~= true then
 				nameLabel.TextStrokeColor3 = player.TeamColor.Color
 				nameLabel.TextStrokeTransparency = 0
@@ -136,9 +136,9 @@ local function linkTag(player: Player, tag: BillboardGui, groupId: number | nil)
 	--  Manages spawn based changes.
 	player.CharacterAppearanceLoaded:Connect(function(character)
 		-- Updates the health bar size.
-		local healthBar = tag.Frame.HealthBar
-		healthBar.Size = config.healthBar["Size"]
-		character.Humanoid:GetPropertyChangedSignal("Health"):Connect(function()
+		local healthBar: Frame = tag.Frame.HealthBar
+		healthBar.Size = config.defaults.healthBar["Size"]
+		character:WaitForChild("Humanoid"):GetPropertyChangedSignal("Health"):Connect(function()
 			tag.Frame.HealthBar.Size = UDim2.new(
 				( character.Humanoid.Health / character.Humanoid.MaxHealth ) * config.options["healthBarScale"],
 				healthBar.Size.X.Offset,
