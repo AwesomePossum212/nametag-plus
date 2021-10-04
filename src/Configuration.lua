@@ -1,4 +1,5 @@
 local config = {}
+config.defaults = {}
 
 -- Basic settings used in the whole system.
 config.options = {
