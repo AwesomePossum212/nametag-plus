@@ -11,7 +11,7 @@
 local config = require(script.Configuration)
 local utils = require(script.Utilities)
 
-local holder = utils.constructFromProperties("Folder", config.holder)
+local holder = utils.constructFromProperties("Folder", config.defaults.holder)
 
 
 local nametagPlus = {}
