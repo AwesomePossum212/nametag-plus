@@ -1,6 +1,9 @@
 {
     "name": "Nametag-Plus",
     "tree": {
-        "$path": "src"
+        "ReplicatedStorage": {
+            "$className": "ReplicatedStorage",
+            "$path": "src"
+        }
     }
 }
