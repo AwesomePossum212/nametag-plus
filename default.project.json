@@ -6,7 +6,7 @@
         "ReplicatedStorage": {
             "$className": "ReplicatedStorage",
 
-            "Common": {
+            "NametagPlus": {
                 "$path": "src"
             }
         }
