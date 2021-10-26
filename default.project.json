@@ -5,7 +5,10 @@
         
         "ReplicatedStorage": {
             "$className": "ReplicatedStorage",
-            "$path": "src"
+
+            "Common": {
+                "$path": "src"
+            }
         }
     }
 }
