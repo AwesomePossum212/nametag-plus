@@ -100,7 +100,7 @@ local function getTag(player: Player): BillboardGui
 	end
 end
 
-local function changeTag(tag: BillboardGui, objectName: string, newPropertyValues: Dictionary<any>): nil
+local function changeTag(tag: BillboardGui, objectName: string, newPropertyValues: table): nil
 	-- Uses util functions to modify the selected
 	if tag ~= nil then
 		if objectName ~= "Frame" then
@@ -122,9 +122,9 @@ local function linkTag(player: Player, tag: BillboardGui, groupId: number | nil)
 	-- Deals with updating the name's text border color with the team color.
 	if config.options["nameOutlinedWithTeamColor"] == true then
 		local updateTeamColor = function()
-			local nameLabel: TextLabel = tag
+			local nameLabel = tag
 				:FindFirstChild(config.defaults.frame["Name"])
-				:FindFirstChild(config.defaults.name["Name"])
+				:FindFirstChild(config.defaults.name["Name"]) :: TextLabel
 			if player.Neutral ~= true then
 				nameLabel.TextStrokeColor3 = player.TeamColor.Color
 				nameLabel.TextStrokeTransparency = 0
@@ -140,11 +140,12 @@ local function linkTag(player: Player, tag: BillboardGui, groupId: number | nil)
 	--  Manages spawn based changes.
 	player.CharacterAppearanceLoaded:Connect(function(character)
 		-- Updates the health bar size.
-		local healthBar: Frame = tag.Frame.HealthBar
+		local healthBar = tag.Frame.HealthBar :: Frame
+		local humanoid = character:WaitForChild("Humanoid")
 		healthBar.Size = config.defaults.healthBar["Size"]
 		character:WaitForChild("Humanoid"):GetPropertyChangedSignal("Health"):Connect(function()
-			tag.Frame.HealthBar.Size = UDim2.new(
-				(character.Humanoid.Health / character.Humanoid.MaxHealth) * config.options["healthBarScale"],
+			healthBar.Size = UDim2.new(
+				(humanoid.Health / humanoid.MaxHealth) * config.options["healthBarScale"],
 				healthBar.Size.X.Offset,
 				healthBar.Size.Y.Scale,
 				healthBar.Size.Y.Offset
@@ -159,7 +160,7 @@ local function linkTag(player: Player, tag: BillboardGui, groupId: number | nil)
 			end
 		end
 		-- Changes the humanoid to display the tag.
-		character.Humanoid.DisplayDistanceType = "None"
+		humanoid.DisplayDistanceType = "None"
 		tag.Adornee = character.Head
 	end)
 	tag.Enabled = true -- Enables the tag to make it visible after the changes are complete.
