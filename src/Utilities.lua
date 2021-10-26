@@ -8,40 +8,40 @@
 
 local util = {}
 
--- Functions
+-->> Functions
 local function constructFromProperties(class: string, properties: Dictionary<any>)
-    local object = Instance.new(class)
+	local object = Instance.new(class)
 
-    for key, value in pairs(properties) do
-        object[key] = value
-    end
+	for key, value in pairs(properties) do
+		object[key] = value
+	end
 
-    return(object)
+	return object
 end
 
 local function modifyFromProperties(object: Instance, properties: Dictionary<any>)
-    local cObject = object:Clone()
-    for key, value in pairs(properties) do
-        cObject[key] = value
-    end
+	local cObject = object:Clone()
+	for key, value in pairs(properties) do
+		cObject[key] = value
+	end
 
-    return cObject
+	return cObject
 end
 
 local function waitForProperty(object: Instance, propertyName: string)
-    if object ~= nil then
-        if object[propertyName] then
-            return(object[propertyName])
-        else
-            coroutine.wrap(function()
-                repeat
-                    task.wait(0.01)
-                until object[propertyName] ~= nil
+	if object ~= nil then
+		if object[propertyName] then
+			return object[propertyName]
+		else
+			coroutine.wrap(function()
+				repeat
+					task.wait(0.01)
+				until object[propertyName] ~= nil
 
-                return(object[propertyName])
-            end)
-        end
-    end
+				return object[propertyName]
+			end)
+		end
+	end
 end
 
 -- Exports
