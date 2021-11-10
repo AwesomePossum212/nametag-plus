@@ -101,16 +101,31 @@ local function getTag(player: Player): BillboardGui
 	end
 end
 
-local function changeTag(tag: BillboardGui, objectName: string, newPropertyValues: table): nil
+local function changeTag(tag: BillboardGui, ...): nil
 	-- Uses util functions to modify the selected
 	if tag ~= nil then
-		if objectName ~= "Frame" then
-			local newObjWithProps = utils.modifyFromProperties(tag:FindFirstChild("Frame"):FindFirstChild(objectName), newPropertyValues)
-			tag.Frame = newObjWithProps
-		else
-			local newObjWithProps = utils.modifyFromProperties(tag:FindFirstChild(objectName), newPropertyValues)
-			local oldObj = tag.Frame:FindFirstChild(objectName)
-			oldObj = newObjWithProps
+		for i = 1, select('#', ...) do
+			local property = select(i, ...)
+
+			-- Get the name of the object they want to change
+			local PROPERTY_NAME = property.Name
+			
+			-- TODO: Use the recursion option in :FindFirstChild()?
+			if PROPERTY_NAME == "Frame" then
+				local object = tag:FindFirstChild("Frame")
+
+				-- Remove the Name assignment
+				property.Name = nil
+
+				utils.modifyFromProperties(object, property)
+			else
+				local object = tag:FindFirstChild("Frame"):FindFirstChild(PROPERTY_NAME)
+
+				-- Remove the Name assignment
+				property.Name = nil
+
+				utils.modifyFromProperties(object, property)
+			end
 		end
 	else
 		error(
