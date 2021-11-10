@@ -19,12 +19,12 @@ local nametagPlus = {}
 local function addTag(player: Player): BillboardGui
 	-- Create the essentials for the nametag
 	-- Overriding the type is essential for typechecking.
-	local billboard: BillboardGui = utils.constructFromProperties("BillboardGui", config.defaults.billboard)
-	local frame: Frame = utils.constructFromProperties("Frame", config.defaults.frame)
-	local name: TextLabel = utils.constructFromProperties("TextLabel", config.defaults.name)
-	local mainStat: TextLabel = utils.constructFromProperties("TextLabel", config.defaults.mainStat)
-	local extraStat: TextLabel = utils.constructFromProperties("TextLabel", config.defaults.extraStat)
-	local healthBar: Frame = utils.constructFromProperties("Frame", config.defaults.healthBar)
+	local billboard = utils.constructFromProperties("BillboardGui", config.defaults.billboard) :: BillboardGui
+	local frame = utils.constructFromProperties("Frame", config.defaults.frame) :: Frame
+	local name = utils.constructFromProperties("TextLabel", config.defaults.name) :: TextLabel
+	local mainStat = utils.constructFromProperties("TextLabel", config.defaults.mainStat) :: TextLabel
+	local extraStat = utils.constructFromProperties("TextLabel", config.defaults.extraStat) :: TextLabel
+	local healthBar = utils.constructFromProperties("Frame", config.defaults.healthBar) :: Frame
 	local healthBackground = healthBar:Clone()
 
 	-- Initial setup of components
@@ -62,6 +62,7 @@ local function addTag(player: Player): BillboardGui
 	extraStat.Parent = frame
 	healthBar.Parent = frame
 	healthBackground.Parent = frame
+	frame.Parent = billboard
 	billboard.Parent = holder
 
 	return billboard
@@ -104,7 +105,7 @@ local function changeTag(tag: BillboardGui, objectName: string, newPropertyValue
 	-- Uses util functions to modify the selected
 	if tag ~= nil then
 		if objectName ~= "Frame" then
-			local newObjWithProps = utils.modifyFromProperties(tag.Frame:FindFirstChild(objectName), newPropertyValues)
+			local newObjWithProps = utils.modifyFromProperties(tag:FindFirstChild("Frame"):FindFirstChild(objectName), newPropertyValues)
 			tag.Frame = newObjWithProps
 		else
 			local newObjWithProps = utils.modifyFromProperties(tag:FindFirstChild(objectName), newPropertyValues)
