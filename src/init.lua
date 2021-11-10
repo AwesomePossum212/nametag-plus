@@ -8,10 +8,14 @@
 
 --]]
 
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local Signal = require(ReplicatedStorage.Packages:WaitForChild("Signal"))
+
 local config = require(script.Configuration)
 local utils = require(script.Utilities)
 
 local holder = utils.constructFromProperties("Folder", config.defaults.holder)
+local teamChangeSignal = Signal.new()
 
 local nametagPlus = {}
 
@@ -148,6 +152,7 @@ local function linkTag(player: Player, tag: BillboardGui, groupId: number | nil)
 				nameLabel.TextStrokeTransparency = 1
 				nameLabel.TextStrokeColor3 = config.presets["colors"]["secondary"]
 			end
+			teamChangeSignal:Fire(player.TeamColor.Color)
 		end
 		updateTeamColor() -- Updates the team color preemptively just in case.
 		player:GetPropertyChangedSignal("Team"):Connect(updateTeamColor)
@@ -187,5 +192,6 @@ nametagPlus.addTag = addTag
 nametagPlus.getTag = getTag
 nametagPlus.changeTag = changeTag
 nametagPlus.linkTag = linkTag
+nametagPlus.teamChange = teamChangeSignal
 
 return nametagPlus
