@@ -3,7 +3,6 @@
 
     constructFromProperties(class, properties): Instance
     modifyFromProperties(object, properties): nil
-    waitForProperty(object, propertyName): property
 
 --]]
 
