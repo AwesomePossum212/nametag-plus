@@ -1,3 +1,4 @@
+--!strict
 --[[
 
     constructFromProperties(class, properties): Instance

@@ -1,3 +1,5 @@
+--!strict
+
 local config = {}
 config.defaults = {}
 
