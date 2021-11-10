@@ -3,7 +3,7 @@
 
         NametagPlus.addTag(player): BillboardGui
         NametagPlus.getTag(player): BillboardGui
-        NametagPlus.changeTag(tag, objectName, newPropertyValues): nil
+        NametagPlus.changeTag(tag, ...): nil
         NametagPlus.linkTag(player, tag, groupId?): nil
 
 --]]
