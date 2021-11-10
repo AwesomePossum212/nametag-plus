@@ -106,7 +106,6 @@ local function changeTag(tag: BillboardGui, ...): nil
 	if tag ~= nil then
 		for i = 1, select('#', ...) do
 			local property = select(i, ...)
-
 			-- Get the name of the object they want to change
 			local PROPERTY_NAME = property.Name
 			
