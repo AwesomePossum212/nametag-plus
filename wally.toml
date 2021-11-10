@@ -1,0 +1,7 @@
+[package]
+name = "awesomepossum212/nametag-plus"
+version = "1.0.0-alpha"
+registry = "https://github.com/UpliftGames/wally-index"
+realm = "shared"
+
+[dependencies]
