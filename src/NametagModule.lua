@@ -120,7 +120,7 @@ module.linkTag = function(player, tag, groupId)
 					mainStatLabel.TextStrokeColor3 = config.presets["colors"]["secondary"]
 				end
 			end
-			updateTeamColor()--Updates the team color preemptively just in case.
+			updateTeamColor()
 			player:GetPropertyChangedSignal("Team"):Connect(updateTeamColor)
 		else
 			local updateTeamColor = function()
