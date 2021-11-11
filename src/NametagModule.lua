@@ -108,6 +108,36 @@ module.linkTag = function(player, tag, groupId)
 		player:GetPropertyChangedSignal("Team"):Connect(updateTeamColor)
 	end
 
+	if config.options["grouproleColoredWithTeamColor"] == true then
+		if config.options["useDisplayName"] == true then
+			local updateTeamColor = function()
+				local mainStatLabel = tag:FindFirstChild(config.frame["Name"]):FindFirstChild(config.extraStat["Name"])
+				if player.Neutral ~= true then
+					mainStatLabel.TextStrokeColor3 = player.TeamColor.Color
+					mainStatLabel.TextColor3 = player.TeamColor.Color
+				else
+					mainStatLabel.TextStrokeTransparency = 1
+					mainStatLabel.TextStrokeColor3 = config.presets["colors"]["secondary"]
+				end
+			end
+			updateTeamColor()--Updates the team color preemptively just in case.
+			player:GetPropertyChangedSignal("Team"):Connect(updateTeamColor)
+		else
+			local updateTeamColor = function()
+				local mainStatLabel = tag:FindFirstChild(config.frame["Name"]):FindFirstChild(config.mainStat["Name"])
+				if player.Neutral ~= true then
+					mainStatLabel.TextStrokeColor3 = player.TeamColor.Color
+					mainStatLabel.TextColor3 = player.TeamColor.Color
+				else
+					mainStatLabel.TextStrokeTransparency = 1
+					mainStatLabel.TextStrokeColor3 = config.presets["colors"]["secondary"]
+				end
+			end
+			updateTeamColor()
+			player:GetPropertyChangedSignal("Team"):Connect(updateTeamColor)
+		end
+	end
+
 	-->> Manages spawn based changes.
 	player.CharacterAppearanceLoaded:Connect(function(character)
 		-->>Updates the health bar size.
@@ -144,7 +174,7 @@ module.changeTag = function(tag, objectName, properties)
 			utils.modifyFromProperties(tag:FindFirstChild(objectName), properties)
 		end
 	else
-		error("The function changeTag experienced an error: the tag passed to the function no longer exists. No changes have been made.")
+		error("The function 'getTag' experienced an error. No changes were made to "..player.Name.."'s tag.")
 	end
 end
 
