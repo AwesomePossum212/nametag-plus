@@ -8,10 +8,6 @@
 
             "NametagPlus": {
                 "$path": "src"
-            },
-
-            "Packages": {
-                "$path": "Packages/"
             }
         }
     }
