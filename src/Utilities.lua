@@ -1,46 +1,45 @@
--->>Services and modules
-local RunService = game:GetService("RunService")
--->>Some useful functions that take a table of properties.
-local module = {}
+--!strict
+--[[
 
--->>(Function) [Yields] [Returns time elapsed] heartbeatWait(length: Number)
---Uses Runservice.Heartbeat to wait a more exact amount of time
-module.heartbeatWait = function()
+    constructFromProperties(class, properties): Instance
+    modifyFromProperties(object, properties): nil
+
+--]]
+
+local util = {}
+local RunService = game:GetService("RunService")
+
+-->> Functions
+local function heartbeatWait()
 	local startTime = os.clock()
 	RunService.Heartbeat:Wait()
 	return os.clock() - startTime
 end
 
--->>(Function) [Yields] [Returns Instance of specified class] constructFromProperties(class: String [Specific], properties: Dictionary [Specific])
---String should be a class name that can be constructed using Instance.new.
---See NametagModule for properties table usage (changeTag).
-module.constructFromProperties = function(class, properties)
+local function constructFromProperties(class: string, properties: Dictionary<any>)
 	local object = Instance.new(class)
+
 	for key, value in pairs(properties) do
 		object[key] = value
 	end
+
 	return object
 end
 
--->>(Function) modifyFromProperties(object: Instance, properties: Dictionary [Specific])
---Any instance works, but intended for certain UI components in the nametag.
---See NametagModule for properties table usage (changeTag).
-module.modifyFromProperties = function(object, properties)
+local function modifyFromProperties(object: Instance, properties: Dictionary<any>)
 	for key, value in pairs(properties) do
 		object[key] = value
 	end
 end
 
---->>(Function) [Yields] [Returns loaded property's value] waitForProperty(object:Instance, propertyName: String [Specific])
---Waits for a property to return a normal value, then sends it back to the requester.
-module.waitForProperty = function(object, propertyName)
+local function waitForProperty(object: Instance, propertyName: string)
 	if object ~= nil then
-		if object[propertyName] ~= nil then--If we get lucky and the property is already loaded, send it back to the requester.
+		if object[propertyName] ~= nil then
 			return object[propertyName]
-		else--But most of the time when this is called the property is yet to be loaded.
-			coroutine.wrap(function()--A coroutine is used to let the requester move on without it being finished.
+		else
+			coroutine.wrap(function()
 				repeat
-					module.heartbeatWait(.01)
+					heartbeatWait()
 				until object[propertyName] ~= nil
 				return object[propertyName]
 			end)
@@ -48,4 +47,9 @@ module.waitForProperty = function(object, propertyName)
 	end
 end
 
-return module
+-- Exports
+util.constructFromProperties = constructFromProperties
+util.modifyFromProperties = modifyFromProperties
+util.waitForProperty = waitForProperty
+
+return util

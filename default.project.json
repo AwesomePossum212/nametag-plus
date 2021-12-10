@@ -1,0 +1,14 @@
+{
+    "name": "Nametag-Plus",
+    "tree": {
+        "$className": "DataModel",
+        
+        "ReplicatedStorage": {
+            "$className": "ReplicatedStorage",
+
+            "NametagPlus": {
+                "$path": "src"
+            }
+        }
+    }
+}
