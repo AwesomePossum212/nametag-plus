@@ -108,7 +108,7 @@ module.linkTag = function(player, tag, groupId)
 		player:GetPropertyChangedSignal("Team"):Connect(updateTeamColor)
 	end
 
-	if config.options["grouproleColoredWithTeamColor"] == true then
+	if config.options["groupRoleColoredWithTeamColor"] == true then
 		if config.options["useDisplayName"] == true then
 			local updateTeamColor = function()
 				local mainStatLabel = tag:FindFirstChild(config.frame["Name"]):FindFirstChild(config.extraStat["Name"])
@@ -174,7 +174,7 @@ module.changeTag = function(tag, objectName, properties)
 			utils.modifyFromProperties(tag:FindFirstChild(objectName), properties)
 		end
 	else
-		error("The function 'getTag' experienced an error. No changes were made to "..player.Name.."'s tag.")
+		error("The function changeTag experienced an error: the tag passed to the function no longer exists. No changes have been made.")
 	end
 end
 
