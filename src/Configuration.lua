@@ -9,6 +9,7 @@ config.options = {
 	defaultText = "",
 	maxDistanceVisibleFrom = 50,
 	nameOutlinedWithTeamColor = true,
+  groupRoleColoredWithTeamColor = false,
 	healthBarAnchorPoint = Vector2.new(0, 0),
 	healthBarScale = 0.8,
 	--[[ Overrides the name
@@ -18,7 +19,7 @@ config.options = {
         name and mainStat will keep the display/user name unless
         it is overrided with changeTag().
     --]]
-	useDisplayName = false,
+	useDisplayName = true,
 }
 
 -->> Preset styles

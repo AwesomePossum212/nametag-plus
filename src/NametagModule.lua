@@ -152,7 +152,38 @@ local function linkTag(player: Player, tag: BillboardGui, groupId: number | nil)
 		player:GetPropertyChangedSignal("Team"):Connect(updateTeamColor)
 	end
 
-	--  Manages spawn based changes.
+	if config.options["groupRoleColoredWithTeamColor"] == true then
+		if config.options["useDisplayName"] == true then
+			local updateTeamColor = function()
+				local mainStatLabel = tag:FindFirstChild(config.frame["Name"]):FindFirstChild(config.extraStat["Name"])
+				if player.Neutral ~= true then
+					mainStatLabel.TextStrokeColor3 = player.TeamColor.Color
+					mainStatLabel.TextColor3 = player.TeamColor.Color
+				else
+					mainStatLabel.TextStrokeTransparency = 1
+					mainStatLabel.TextStrokeColor3 = config.presets["colors"]["secondary"]
+				end
+			end
+			updateTeamColor()
+			player:GetPropertyChangedSignal("Team"):Connect(updateTeamColor)
+		else
+			local updateTeamColor = function()
+				local mainStatLabel = tag:FindFirstChild(config.frame["Name"]):FindFirstChild(config.mainStat["Name"])
+				if player.Neutral ~= true then
+					mainStatLabel.TextStrokeColor3 = player.TeamColor.Color
+					mainStatLabel.TextColor3 = player.TeamColor.Color
+				else
+					mainStatLabel.TextStrokeTransparency = 1
+					mainStatLabel.TextStrokeColor3 = config.presets["colors"]["secondary"]
+				end
+			end
+			updateTeamColor()
+			player:GetPropertyChangedSignal("Team"):Connect(updateTeamColor)
+		end
+	end
+
+	-->> Manages spawn based changes.
+
 	player.CharacterAppearanceLoaded:Connect(function(character)
 		-- Updates the health bar size.
 		local healthBar = tag.Frame.HealthBar :: Frame
