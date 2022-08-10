@@ -23,12 +23,13 @@ Gets the tag for a player that has already been created using data from *Configu
 
 Links a specific tag to a player, which makes it so the script automatically updates team color, group ranks, etc. The group id will make *NametagModule* automatically update a player's group role in the *MainStat* text label on spawn. This system allows you to link different players to different groups as needed. This should only be called once.
 
-**.changeTag**(tag: Nametag, objectName: String [specific], properties: Dictionary [specific])
+**.changeTag**(tag: Nametag, ...)
 
-This will change the given part of the tag using the dictionary provided. The objectName parameter should be the name of the instance (in the nametag) that you want to change (i.e. "Frame" or "MainStat"). It is recommended to reference *Configuration* to get the most up-to-date name. The properties dictionary follows this format:
+This will change the given part of the tag using the dictionary provided. The Name index in the table should be the name of the instance (in the nametag) that you want to change (i.e. "Frame" or "MainStat"). It is recommended to reference *Configuration* to get the most up-to-date name. The properties dictionary follows this format:
 
 ````
 props = {
+  Name = "objectName";
   propertyName = newValue;
   propertyName = newValue;
   *etc.*
@@ -37,6 +38,7 @@ props = {
 So, for example:
 ````
 example = {
+  Name = "MainStat"
   Text = "foo";
   ZIndex = 5;
   Visible = true;
